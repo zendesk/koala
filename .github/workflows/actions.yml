@@ -1,0 +1,38 @@
+name: main
+
+on: 
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  main:
+    runs-on: zendesk-stable
+    continue-on-error: ${{ matrix.allow_failures }}
+    strategy:
+      fail-fast: true
+      matrix:
+        allow_failures: [ false ]
+        rvm: 
+          - 2.4.10
+          - 2.5.8
+          - 2.6
+        include:
+          - rvm: head
+            allow_failures: true
+    steps:
+      - uses: zendesk/checkout@v2
+      - uses: zendesk/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.rvm }}
+
+#
+# bundle install, test, etc?
+#
+
+      - name: after_success
+        run: bundle exec codeclimate-test-reporting
+        if: ${{ success() }}
+      
+
+
