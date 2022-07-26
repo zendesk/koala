@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Koala
   module Facebook
     # This class, given a Koala::HTTPService::Response object, will check for Graph API-specific
@@ -5,6 +7,7 @@ module Koala
     # (non-batch) or added to the list of batch results (batch)
     class GraphErrorChecker
       attr_reader :http_status, :body, :headers
+
       def initialize(http_status, body, headers)
         @http_status = http_status.to_i
         @body = body
@@ -13,16 +16,14 @@ module Koala
 
       # Facebook has a set of standardized error codes, some of which represent problems with the
       # token.
-      AUTHENTICATION_ERROR_CODES = [102, 190, 450, 452, 2500]
+      AUTHENTICATION_ERROR_CODES = [102, 190, 450, 452, 2500].freeze
 
       # Facebook can return debug information in the response headers -- see
       # https://developers.facebook.com/docs/graph-api/using-graph-api#bugdebug
-      DEBUG_HEADERS = ["x-fb-debug", "x-fb-rev", "x-fb-trace-id"]
+      DEBUG_HEADERS = %w[x-fb-debug x-fb-rev x-fb-trace-id].freeze
 
       def error_if_appropriate
-        if http_status >= 400
-          error_class.new(http_status, body, error_info)
-        end
+        error_class.new(http_status, body, error_info) if http_status >= 400
       end
 
       protected
@@ -47,9 +48,8 @@ module Koala
       def error_info
         # Build up the complete error info from whatever Facebook gives us plus the header
         # information
-        @error_info ||= DEBUG_HEADERS.inject(base_error_info) do |hash, error_key|
+        @error_info ||= DEBUG_HEADERS.each_with_object(base_error_info) do |error_key, hash|
           hash[error_key] = headers[error_key] if headers[error_key]
-          hash
         end
       end
 
@@ -60,11 +60,13 @@ module Koala
       def response_hash
         # Normally, we start with the response body. If it isn't valid JSON, we start with an empty
         # hash and fill it with error data.
-        @response_hash ||= begin
-          JSON.parse(body)
-        rescue JSON::ParserError
-          {}
-        end
+        @response_hash ||=
+          begin
+            response_body = JSON.parse(body)
+            response_body.is_a?(Hash) ? response_body : {}
+          rescue JSON::ParserError
+            {}
+          end
       end
     end
   end
