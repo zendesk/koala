@@ -1,3 +1,8 @@
+unreleased
+======
+* Dropped Ruby < 2.7
+* Tests with Ruby 2.7
+
 v3.0.0 (2017-03-17)
 ======
 

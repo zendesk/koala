@@ -235,7 +235,6 @@ module KoalaTest
       # allow live tests with different adapters
       adapter = ENV['ADAPTER'] || "typhoeus" # use Typhoeus by default if available
       begin
-        # JRuby doesn't support typhoeus on Travis
         unless defined? JRUBY_VERSION
           require adapter
           require 'typhoeus/adapters/faraday' if adapter.to_s == "typhoeus"
