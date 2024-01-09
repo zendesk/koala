@@ -65,7 +65,6 @@ module Koala
             batch_results += generate_results(response, batch)
           end
         end
-
         batch_results
       end
 
