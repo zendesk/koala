@@ -28,6 +28,12 @@ class Koala::Configuration
   # The server to use when constructing dialog URLs.
   attr_accessor :dialog_host
 
+  # Whether or not to mask tokens
+  attr_accessor :mask_tokens
+
+  # Called with the info for the rate limits in the response header
+  attr_accessor :rate_limit_hook
+
   # Certain Facebook services (beta, video) require you to access different
   # servers. If you're using your own servers, for instance, for a proxy,
   # you can change both the matcher (what value to change when updating the URL) and the
@@ -45,5 +51,6 @@ class Koala::Configuration
     Koala::HTTPService::DEFAULT_SERVERS.each_pair do |key, value|
       self.public_send("#{key}=", value)
     end
+    self.mask_tokens = true
   end
 end

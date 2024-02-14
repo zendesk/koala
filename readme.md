@@ -1,4 +1,4 @@
-Koala [![Version](https://img.shields.io/gem/v/koala.svg)](https://rubygems.org/gems/koala) [![Dependencies](https://img.shields.io/gemnasium/arsduo/koala.svg)](https://gemnasium.com/arsduo/koala) [![Build Status](https://img.shields.io/travis/arsduo/koala.svg)](http://travis-ci.org/arsduo/koala) [![Code Climate](https://img.shields.io/codeclimate/github/arsduo/koala.svg)](https://codeclimate.com/github/arsduo/koala) [![Code Coverage](https://img.shields.io/codeclimate/coverage/github/arsduo/koala.svg)](https://codeclimate.com/github/arsduo/koala)
+Koala [![Version](https://img.shields.io/gem/v/koala.svg)](https://rubygems.org/gems/koala) [![Build Status](https://img.shields.io/travis/arsduo/koala.svg)](http://travis-ci.org/arsduo/koala) [![Code Climate](https://img.shields.io/codeclimate/coverage-letter/arsduo/koala.svg)](https://codeclimate.com/github/arsduo/koala) [![Code Coverage](https://img.shields.io/codeclimate/coverage/arsduo/koala.svg)](https://codeclimate.com/github/arsduo/koala)
 ====
 [Koala](http://github.com/arsduo/koala) is a Facebook library for Ruby, supporting the Graph API (including the batch requests and photo uploads), the Marketing API, the Atlas API, realtime updates, test users, and OAuth validation.  We wrote Koala with four goals:
 
@@ -176,6 +176,37 @@ And to top it all off, RealtimeUpdates provides a static method to respond to Fa
 Koala::Facebook::RealtimeUpdates.meet_challenge(params, your_verify_token)
 ```
 For more information about meet_challenge and the RealtimeUpdates class, check out the Real-Time Updates page on the wiki.
+
+Rate limits
+-----------
+
+We support Facebook rate limit informations as defined here: [https://developers.facebook.com/docs/graph-api/overview/rate-limiting/](https://developers.facebook.com/docs/graph-api/overview/rate-limiting/)
+
+The information is available either via the `Facebook::APIError`:
+
+```ruby
+error.fb_buc_usage
+error.fb_ada_usage
+error.fb_app_usage
+```
+
+Or with the rate_limit_hook:
+
+```ruby
+# App level configuration
+
+Koala.configure do |config|
+  config.rate_limit_hook = ->(limits) { 
+    limits["x-app-usage"] # {"call_count"=>0, "total_cputime"=>0, "total_time"=>0}
+    limits["x-ad-account-usage"] # {"acc_id_util_pct"=>9.67}
+    limits["x-business-use-case-usage"] # {"123456789012345"=>[{"type"=>"messenger", "call_count"=>1, "total_cputime"=>1, "total_time"=>1, "estimated_time_to_regain_access"=>0}]}
+  }
+end
+
+# Per API configuration
+
+Koala::Facebook::API.new('', '', ->(limits) {})
+```
 
 Test Users
 ----------

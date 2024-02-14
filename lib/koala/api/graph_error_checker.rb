@@ -20,7 +20,7 @@ module Koala
 
       # Facebook can return debug information in the response headers -- see
       # https://developers.facebook.com/docs/graph-api/using-graph-api#bugdebug
-      DEBUG_HEADERS = %w[x-fb-debug x-fb-rev x-fb-trace-id].freeze
+      DEBUG_HEADERS = %w[x-fb-debug x-fb-rev x-fb-trace-id x-business-use-case-usage x-ad-account-usage x-app-usage].freeze
 
       def error_if_appropriate
         error_class.new(http_status, body, error_info) if http_status >= 400
@@ -60,13 +60,12 @@ module Koala
       def response_hash
         # Normally, we start with the response body. If it isn't valid JSON, we start with an empty
         # hash and fill it with error data.
-        @response_hash ||=
-          begin
-            response_body = JSON.parse(body)
-            response_body.is_a?(Hash) ? response_body : {}
-          rescue JSON::ParserError
-            {}
-          end
+        @response_hash ||= begin
+          parsed_body = JSON.parse(body)
+          parsed_body.is_a?(Hash) ? parsed_body : {}
+        rescue JSON::ParserError
+          {}
+        end
       end
     end
   end

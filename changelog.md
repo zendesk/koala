@@ -1,3 +1,83 @@
+Unreleased
+==========
+
+**Key breaking changes:**
+
+New features:
+
+Updated features:
+
+Removed features:
+
+Internal improvements:
+
+Testing improvements:
+
+Others:
+
+v3.5.0 (2023-08-23)
+======
+
+Internal improvements:
+* Raise ClientError instead of NoMethodError when body is 'null' ([#673](https://github.com/arsduo/koala/issues/673))
+
+v3.4.0 (2023-01-05)
+======
+
+Updated features:
+
+* Force use by default of HTTPS (instead of HTTP) when there is no access token.
+  HTTP can still be used by passing :use_ssl => false in the options hash for an api call ([#678](https://github.com/arsduo/koala/pull/678/files))
+
+v3.3.0 (2022-09-27)
+======
+
+Updated features:
+
+  * Removed restriction on faraday < 2 ([#666](https://github.com/arsduo/koala/pull/666))
+
+Internal improvements:
+
+ * Remove multipart hack and use default faraday multipart middleware ([#664](https://github.com/arsduo/koala/pull/664))
+
+Testing improvements:
+
+ * Fix tests with ruby-head ([#674](https://github.com/arsduo/koala/pull/674))
+ * Keep supported rubies (non EOL) for CI ([#675](https://github.com/arsduo/koala/pull/675))
+
+v3.2.0 (2022-05-27)
+======
+
+New features:
+
+  * Exposes limiting headers(`x-business-use-case-usage, x-ad-account-usage, x-app-usage`) to APIError ([#668](https://github.com/arsduo/koala/pull/668))
+  * Add `rate_limit_hook` configuration to get rate limiting headers (`x-business-use-case-usage, x-ad-account-usage, x-app-usage`) ([#670](https://github.com/arsduo/koala/pull/670))
+
+Testing improvements:
+
+* Fix builds for ruby 3.x
+
+v3.1.0 (2022-01-18)
+======
+
+New features:
+
+* mask_tokens config (default: true) to mask tokens in logs
+
+Updated features:
+
+* Log before and after sending request
+
+Internal improvements:
+
+* Lock Faraday to < 2
+* Compatibility with ruby 3.x
+
+Testing improvements:
+
+* Use Github actions for CI
+* Run CI on latest rubies
+
 v3.0.0 (2017-03-17)
 ======
 
