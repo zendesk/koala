@@ -28,4 +28,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency("addressable", "~> 2.8")
   gem.add_runtime_dependency("json", "~> 2.6")
   gem.add_runtime_dependency("rexml")
+  gem.add_runtime_dependency("base64")
 end
